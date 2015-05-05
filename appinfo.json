@@ -1,0 +1,25 @@
+{
+    "appKeys": {
+        "WEATHER_TEMPERATURE_KEY": 1
+    },
+    "capabilities": [
+        "location"
+    ],
+    "companyName": "fredley@gmail.com",
+    "longName": "British Fuzzy Time",
+    "projectType": "native",
+    "resources": {
+        "media": []
+    },
+    "sdkVersion": "3",
+    "shortName": "British Fuzzy Time",
+    "targetPlatforms": [
+        "basalt"
+    ],
+    "uuid": "7b590328-8c49-485b-b9cc-0fdf86f7b751",
+    "versionCode": 1,
+    "versionLabel": "1.0",
+    "watchapp": {
+        "watchface": true
+    }
+}
