@@ -1,6 +1,6 @@
 {
     "appKeys": {
-        "WEATHER_TEMPERATURE_KEY": 1
+        "WEATHER_TEMPERATURE_KEY": 3
     },
     "capabilities": [
         "location"

@@ -15,7 +15,7 @@ static AppSync s_sync;
 static uint8_t s_sync_buffer[64];
 
 enum WeatherKey {
-  WEATHER_TEMPERATURE_KEY = 0x1  // TUPLE_CSTRING
+  WEATHER_TEMPERATURE_KEY = 0x3  // TUPLE_CSTRING
 };
 
 static int increment_hour(int hour) {
@@ -27,8 +27,13 @@ static int increment_hour(int hour) {
 }
 
 static void set_colour(uint8_t temp){
-  temp = 16;
-  if(temp > 25){
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "Setting temp: %d", temp);
+  if(temp > 100){
+    //error, or apocalypse. Either way, black.
+    s_main_colour = GColorDarkGray;
+    s_high_colour = GColorWhite;
+    s_dark_colour = GColorBlack;
+  }else if(temp > 25){
     //red
     s_main_colour = GColorSunsetOrange;
     s_high_colour = GColorPastelYellow;
@@ -77,9 +82,7 @@ static void sync_tuple_changed_callback(const uint32_t key, const Tuple* new_tup
   switch (key) {
     case WEATHER_TEMPERATURE_KEY:
       // App Sync keeps new_tuple in s_sync_buffer, so we may use it directly
-      APP_LOG(APP_LOG_LEVEL_DEBUG,"%d",new_tuple->value->uint8);
       set_colour(new_tuple->value->uint8);
-//       text_layer_set_text(s_temperature_layer, new_tuple->value->cstring);
       break;
   }
 }
@@ -102,6 +105,7 @@ static void request_weather(void) {
 
 static void update_graphics(Layer *lyr, GContext *ctx) {
   GRect bounds = layer_get_bounds(s_canvas_layer);
+  graphics_context_set_antialiased(ctx, true);
 
   // Get the center of the screen (non full-screen)
   GPoint center = GPoint(bounds.size.w / 2, (bounds.size.h / 2));
@@ -157,8 +161,8 @@ static void update_time() {
   time_t temp = time(NULL); 
   struct tm *tick_time = localtime(&temp);
   
-  if(tick_time->tm_min % 10 == 0){
-    // request weather every 10 minutes
+  if(true || tick_time->tm_min % 30 == 0){
+    // request weather every 30 minutes
     request_weather();
   }
 
@@ -210,6 +214,8 @@ static void main_window_load(Window *window) {
   s_high_colour = GColorWhite;
   s_dark_colour = GColorDarkGray;
   
+  s_hour_hand = gpath_create(&HOUR_HAND_POINTS);
+  
   window_set_background_color(window, s_main_colour);
   
   // Create time TextLayer
@@ -260,6 +266,7 @@ static void main_window_load(Window *window) {
 static void main_window_unload(Window *window) {
   // Destroy TextLayer
   text_layer_destroy(s_time_layer);
+  text_layer_destroy(s_shadow_layer);
   layer_destroy(s_canvas_layer);
   gpath_destroy(s_hour_hand);
 }
@@ -277,16 +284,8 @@ static void init() {
     .load = main_window_load,
     .unload = main_window_unload
   });
-
-  // Show the Window on the watch, with animated=true
   window_stack_push(s_main_window, true);
-  
-  // Register with TickTimerService
   tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
-  
-  //setup hour hand shape
-  s_hour_hand = gpath_create(&HOUR_HAND_POINTS);
-  
   app_message_open(64, 64);
 }
 
