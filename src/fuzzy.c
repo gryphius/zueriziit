@@ -11,20 +11,14 @@ static GColor8 s_main_colour;
 static GColor8 s_high_colour;
 static GColor8 s_dark_colour;
 
+static uint8_t s_charge;
+
 static AppSync s_sync;
 static uint8_t s_sync_buffer[64];
 
 enum WeatherKey {
-  WEATHER_TEMPERATURE_KEY = 0x3  // TUPLE_CSTRING
+  WEATHER_TEMPERATURE_KEY = 0x3
 };
-
-static int increment_hour(int hour) {
-  hour += 1;
-  if (hour == 13){
-    hour = 1;
-  }
-  return hour;
-}
 
 static void set_colour(uint8_t temp){
   APP_LOG(APP_LOG_LEVEL_DEBUG, "Setting temp: %d", temp);
@@ -108,7 +102,7 @@ static void update_graphics(Layer *lyr, GContext *ctx) {
   graphics_context_set_antialiased(ctx, true);
 
   // Get the center of the screen (non full-screen)
-  GPoint center = GPoint(bounds.size.w / 2, (bounds.size.h / 2));
+  GPoint center = GPoint(bounds.size.w / 2, (bounds.size.h / 2) + 4);
   GPoint shadow = GPoint(center.x + 2, center.y + 2);
 
   // Draw the circle
@@ -129,25 +123,26 @@ static void update_graphics(Layer *lyr, GContext *ctx) {
   gpath_rotate_to(s_hour_hand, (TRIG_MAX_ANGLE * (((t->tm_hour % 12) * 6) + (t->tm_min / 10))) / (12 * 6));
   gpath_draw_filled(ctx, s_hour_hand);
   
+  // Draw the battery level
+  graphics_fill_rect(ctx, GRect(0,0,((bounds.size.w * s_charge) / 100) + 2,7),0,GCornerNone);
+  
   gpath_move_to(s_hour_hand, center);
   graphics_context_set_fill_color(ctx, s_high_colour);
   gpath_rotate_to(s_hour_hand, (TRIG_MAX_ANGLE * (((t->tm_hour % 12) * 6) + (t->tm_min / 10))) / (12 * 6));
   gpath_draw_filled(ctx, s_hour_hand);
-}
-
-static char *get_hour(int h){
-  if(h > 12){
-    h -= 12;
-  }
-  return (char *)HOURS[h-1];
+  
+  // Draw the battery level
+  graphics_fill_rect(ctx, GRect(0,0,(bounds.size.w * s_charge) / 100,5),0,GCornerNone);
+  
 }
 
 static void update_time() {
   // Get a tm structure
   time_t temp = time(NULL); 
   struct tm *tick_time = localtime(&temp);
-  
-  if(true || tick_time->tm_min % 30 == 0){
+  int minutes = tick_time->tm_min;
+  int hours = tick_time->tm_hour % 12;
+  if(minutes % 30 == 0){
     // request weather every 30 minutes
     request_weather();
   }
@@ -157,9 +152,9 @@ static void update_time() {
 //   text_layer_set_text(s_time_layer, buffer);
 //   return;
   
-  int minutes = tick_time->tm_min;
-  char *hour = get_hour(tick_time->tm_hour);
-  char *next_hour = get_hour(increment_hour(tick_time->tm_hour));
+  char *hour = (char *)HOURS[hours];
+  hours = (hours + 1) % 12;
+  char *next_hour = (char *)HOURS[hours];
   if(minutes <= 5 || minutes > 55){
     // ish
     if(minutes > 10){
@@ -205,12 +200,12 @@ static void main_window_load(Window *window) {
   window_set_background_color(window, s_main_colour);
   
   // Create time TextLayer
-  s_time_layer = text_layer_create(GRect(5, 90, 135, 75));
+  s_time_layer = text_layer_create(GRect(5, 95, 135, 70));
   text_layer_set_background_color(s_time_layer, GColorClear);
   text_layer_set_text_color(s_time_layer, s_high_colour);
   text_layer_set_text(s_time_layer, "...");
 
-  s_shadow_layer = text_layer_create(GRect(7, 92, 135, 75));
+  s_shadow_layer = text_layer_create(GRect(7, 97, 135, 70));
   text_layer_set_background_color(s_shadow_layer, GColorClear);
   text_layer_set_text_color(s_shadow_layer, s_dark_colour);
   text_layer_set_text(s_shadow_layer, "...");
@@ -233,6 +228,11 @@ static void main_window_load(Window *window) {
   layer_set_update_proc(s_canvas_layer, update_graphics);
   
   layer_add_child(window_get_root_layer(window), s_canvas_layer);
+  
+  // initialise battery display
+  
+  BatteryChargeState charge = battery_state_service_peek();
+  s_charge = charge.charge_percent;
   
   // Make sure the time is displayed from the start
   update_time();
@@ -260,6 +260,10 @@ static void main_window_unload(Window *window) {
 static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
   update_time();
 }
+
+static void battery_handler(BatteryChargeState charge) {
+  s_charge = charge.charge_percent;
+}
   
 static void init() {
   // Create main Window element and assign to pointer
@@ -272,6 +276,7 @@ static void init() {
   });
   window_stack_push(s_main_window, true);
   tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
+  battery_state_service_subscribe(battery_handler);
   app_message_open(64, 64);
 }
 

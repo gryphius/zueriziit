@@ -12,4 +12,4 @@ static const GPathInfo HOUR_HAND_POINTS = {
   }
 };
 
-static const char *HOURS[] = {"one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve"};
+static const char *HOURS[] = {"twelve","one","two","three","four","five","six","seven","eight","nine","ten","eleven"};
