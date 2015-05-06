@@ -1,4 +1,4 @@
-#include "hello_world.h"
+#include "fuzzy.h"
 #include <pebble.h>
   
 static Window *s_main_window;
