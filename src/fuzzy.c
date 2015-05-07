@@ -5,6 +5,7 @@ static Window *s_main_window;
 static TextLayer *s_time_layer;
 static TextLayer *s_shadow_layer;
 static Layer *s_canvas_layer;
+
 static GPath *s_hour_hand;
 
 static GColor8 s_main_colour;
@@ -250,7 +251,6 @@ static void main_window_load(Window *window) {
 }
 
 static void main_window_unload(Window *window) {
-  // Destroy TextLayer
   text_layer_destroy(s_time_layer);
   text_layer_destroy(s_shadow_layer);
   layer_destroy(s_canvas_layer);
