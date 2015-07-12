@@ -90,11 +90,11 @@ static void update_time() {
   }else if(minutes > 17 && minutes <= 22){
     snprintf(buffer, sizeof("Zwänzg ab zwölfi"), "Zwänzg ab %s", hour);
   }else if(minutes > 22 && minutes <= 27){
-    snprintf(buffer, sizeof("Foif vor Halbi Zwölfi"), "Foif vor Halbi %s", next_hour);
+    snprintf(buffer, sizeof("Foif vor Halbi Zwölfi"), "Foif vor halbi %s", next_hour);
   }else if(minutes > 27 && minutes <= 32){
-    snprintf(buffer, sizeof("Halbi zwölfi"), "Halbi %s", next_hour);
+    snprintf(buffer, sizeof("Halbi zwölfi"), "halbi %s", next_hour);
   }else if(minutes > 32 && minutes <= 37){
-    snprintf(buffer, sizeof("Foif ab halbi zwölfi"), "Foif ab Halbi %s", next_hour);
+    snprintf(buffer, sizeof("Foif ab halbi zwölfi"), "Foif ab halbi %s", next_hour);
   }else if(minutes > 37 && minutes <= 42){
     snprintf(buffer, sizeof("Zwänzg vor zwölfi"), "Zwänzg vor %s", next_hour);
   }else if(minutes > 42 && minutes <= 47){
