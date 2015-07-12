@@ -1,2 +1,2 @@
-# Fuzzy-Colour
-A Fuzzy Time watchface for Pebble Time
+# Züri Ziit
+A Fuzzy Time watchface for Pebble , Swiss-German Zürich Dialect
