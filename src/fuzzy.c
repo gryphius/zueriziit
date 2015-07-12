@@ -17,58 +17,9 @@ static uint8_t s_charge;
 static AppSync s_sync;
 static uint8_t s_sync_buffer[64];
 
-enum WeatherKey {
-  WEATHER_TEMPERATURE_KEY = 0x3
-};
 
-static void set_colour(uint8_t temp){
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "Setting temp: %d", temp);
-  if(temp > 100){
-    //error, or apocalypse. Either way, black.
-    s_main_colour = GColorDarkGray;
-    s_high_colour = GColorWhite;
-    s_dark_colour = GColorBlack;
-  }else if(temp > 25){
-    //red
-    s_main_colour = GColorSunsetOrange;
-    s_high_colour = GColorPastelYellow;
-    s_dark_colour = GColorRed;
-  }else if(temp > 20){
-    //dark orange?
-    s_main_colour = GColorChromeYellow;
-    s_high_colour = GColorPastelYellow;
-    s_dark_colour = GColorOrange;
-  }else if(temp > 15){
-    //orange
-    s_main_colour = GColorRajah;
-    s_high_colour = GColorPastelYellow;
-    s_dark_colour = GColorOrange;
-  }else if(temp > 10){
-    //green
-    s_main_colour = GColorScreaminGreen;
-    s_high_colour = GColorWhite;
-    s_dark_colour = GColorKellyGreen;
-  }else if(temp > 5){
-    //blue
-    s_main_colour = GColorBlueMoon;
-    s_high_colour = GColorCeleste;
-    s_dark_colour = GColorOxfordBlue;
-  }else if(temp > 0){
-    //blue
-    s_main_colour = GColorVeryLightBlue;
-    s_high_colour = GColorWhite;
-    s_dark_colour = GColorOxfordBlue;
-  }else{
-    //white
-    s_main_colour = GColorPictonBlue;
-    s_high_colour = GColorWhite;
-    s_dark_colour = GColorOxfordBlue;
-  }
-  window_set_background_color(s_main_window,s_main_colour);
-  text_layer_set_text_color(s_time_layer, s_high_colour);
-  text_layer_set_text_color(s_shadow_layer, s_dark_colour);
-}
 
+/*
 static void sync_error_callback(DictionaryResult dict_error, AppMessageResult app_message_error, void *context) {
   APP_LOG(APP_LOG_LEVEL_DEBUG, "App Message Sync Error: %d", app_message_error);
 }
@@ -97,6 +48,7 @@ static void request_weather(void) {
 
   app_message_outbox_send();
 }
+*/
 
 static void update_graphics(Layer *lyr, GContext *ctx) {
   GRect bounds = layer_get_bounds(s_canvas_layer);
@@ -143,10 +95,6 @@ static void update_time() {
   struct tm *tick_time = localtime(&temp);
   int minutes = tick_time->tm_min;
   int hours = tick_time->tm_hour % 12;
-  if(minutes % 30 == 0){
-    // request weather every 30 minutes
-    request_weather();
-  }
 
   // Create a long-lived buffer
   static char buffer[] = "foif vor halbi sächsi";
@@ -191,9 +139,9 @@ static void update_time() {
 
 static void main_window_load(Window *window) {
   
-  s_main_colour = GColorBlack;
-  s_high_colour = GColorWhite;
-  s_dark_colour = GColorDarkGray;
+   s_main_colour = GColorVeryLightBlue;
+    s_high_colour = GColorWhite;
+    s_dark_colour = GColorOxfordBlue;
   
   s_hour_hand = gpath_create(&HOUR_HAND_POINTS);
   
@@ -237,6 +185,7 @@ static void main_window_load(Window *window) {
   // Make sure the time is displayed from the start
   update_time();
   
+  /*
   Tuplet initial_values[] = {
     TupletCString(WEATHER_TEMPERATURE_KEY, "0")
   };
@@ -247,6 +196,7 @@ static void main_window_load(Window *window) {
   );
 
   request_weather();
+  */
 }
 
 static void main_window_unload(Window *window) {
