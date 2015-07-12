@@ -84,7 +84,7 @@ static void update_time() {
   }else if(minutes > 3 && minutes <= 7){
     snprintf(buffer, sizeof("Foif ab Zwölfi"), "Foif ab %s", hour);
   }else if(minutes > 7 && minutes <= 12){
-    snprintf(buffer, sizeof("Zäh ab Zwölfi"), "Zäh ab %s", hour);
+    snprintf(buffer, sizeof("Zäh ab Zwölfi"), "Zä ab %s", hour);
   }else if(minutes > 12 && minutes <= 17){
     snprintf(buffer, sizeof("Viertel ab zwölfi"), "Viertel ab %s", hour);
   }else if(minutes > 17 && minutes <= 22){
@@ -100,7 +100,7 @@ static void update_time() {
   }else if(minutes > 42 && minutes <= 47){
     snprintf(buffer, sizeof("Viertel vor zwölfi"), "Viertel vor %s", next_hour);
   }else if(minutes > 47 && minutes <= 52){
-    snprintf(buffer, sizeof("Zäh vor zwölfi"), "Zäh vor %s", next_hour);
+    snprintf(buffer, sizeof("Zäh vor zwölfi"), "Zä vor %s", next_hour);
   }
   // Display this time on the TextLayer
   text_layer_set_text(s_time_layer, buffer);
