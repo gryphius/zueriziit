@@ -1,22 +1,20 @@
 {
-    "appKeys": {
-        "WEATHER_TEMPERATURE_KEY": 3
-    },
+    "appKeys": {},
     "capabilities": [
-        "location"
+        ""
     ],
-    "companyName": "fredley@gmail.com",
-    "longName": "Color Fuzzy Time",
+    "companyName": "Oli Schacher",
+    "longName": "Z\u00fcri Ziit",
     "projectType": "native",
     "resources": {
         "media": []
     },
     "sdkVersion": "3",
-    "shortName": "Color Fuzzy Time",
+    "shortName": "Z\u00fcri Ziit",
     "targetPlatforms": [
         "basalt"
     ],
-    "uuid": "7b590328-8c49-485b-b9cc-0fdf86f7b751",
+    "uuid": "54056a26-4e23-4446-9b1e-43fa63a6caa9",
     "versionLabel": "1.1",
     "watchapp": {
         "watchface": true
