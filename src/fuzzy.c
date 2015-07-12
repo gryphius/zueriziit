@@ -149,41 +149,40 @@ static void update_time() {
   }
 
   // Create a long-lived buffer
-  static char buffer[] = "nearly quarter past eleven";
+  static char buffer[] = "foif vor halbi sächsi";
 //   text_layer_set_text(s_time_layer, buffer);
 //   return;
   
   char *hour = (char *)HOURS[hours];
   hours = (hours + 1) % 12;
   char *next_hour = (char *)HOURS[hours];
-  if(minutes <= 5 || minutes > 55){
+  if(minutes <= 3 || minutes > 57){
     // ish
     if(minutes > 10){
-      snprintf(buffer, sizeof("eleven-ish"), "%s-ish", next_hour);
+      snprintf(buffer, sizeof("öppe Zwölfi"), "öppe %s", next_hour);
     }else{
-      snprintf(buffer, sizeof("eleven-ish"), "%s-ish", hour);
+      snprintf(buffer, sizeof("öppe Zwölfi"), "öppe %s", hour);
     }
-  }else if(minutes > 5 && minutes <= 10){
-    // past
-    snprintf(buffer, sizeof("Past eleven"), "past %s", hour);
-  }else if(minutes > 10 && minutes <= 20){
-    // quarter past
-    snprintf(buffer, sizeof("Quarter past eleven"), "quarter past %s", hour);
-  }else if(minutes > 20 && minutes <= 25){
-    // nearly half past
-    snprintf(buffer, sizeof("Nearly half past eleven"), "nearly half past %s", hour);
-  }else if(minutes > 25 && minutes <= 35){
-    // half past
-    snprintf(buffer, sizeof("Half past eleven"), "half past %s", hour);
-  }else if(minutes > 35 && minutes <= 40){
-    // nearly quarter to
-    snprintf(buffer, sizeof("Nearly quarter to eleven"), "nearly quarter to %s", next_hour);
-  }else if(minutes > 40 && minutes <= 50){
-    // quarter to
-    snprintf(buffer, sizeof("Quarter to eleven"), "quarter to %s", next_hour);
-  }else if(minutes > 50 && minutes <= 55){
-    // nearly
-    snprintf(buffer, sizeof("Nearly eleven"), "nearly %s", next_hour);
+  }else if(minutes > 3 && minutes <= 7){
+    snprintf(buffer, sizeof("Foif ab Zwölfi"), "Foif ab %s", hour);
+  }else if(minutes > 7 && minutes <= 12){
+    snprintf(buffer, sizeof("Zäh ab Zwölfi"), "Zäh ab %s", hour);
+  }else if(minutes > 12 && minutes <= 17){
+    snprintf(buffer, sizeof("Viertel ab zwölfi"), "Viertel ab %s", hour);
+  }else if(minutes > 17 && minutes <= 22){
+    snprintf(buffer, sizeof("Zwänzg ab zwölfi"), "Zwänzg ab %s", hour);
+  }else if(minutes > 22 && minutes <= 27){
+    snprintf(buffer, sizeof("Foif vor Halbi Zwölfi"), "Foif vor Halbi %s", hour);
+  }else if(minutes > 27 && minutes <= 32){
+    snprintf(buffer, sizeof("Halbi zwölfi"), "Halbi %s", hour);
+  }else if(minutes > 32 && minutes <= 37){
+    snprintf(buffer, sizeof("Foif ab halbi zwölfi"), "Foif ab halbi %s", next_hour);
+  }else if(minutes > 37 && minutes <= 42){
+    snprintf(buffer, sizeof("Zwänzg vor zwölfi"), "Zwänzg vor %s", next_hour);
+  }else if(minutes > 42 && minutes <= 47){
+    snprintf(buffer, sizeof("Viertel vor zwölfi"), "Viertel vor %s", next_hour);
+  }else if(minutes > 47 && minutes <= 52){
+    snprintf(buffer, sizeof("Zäh vor zwölfi"), "Zäh vor %s", next_hour);
   }
   // Display this time on the TextLayer
   text_layer_set_text(s_time_layer, buffer);
