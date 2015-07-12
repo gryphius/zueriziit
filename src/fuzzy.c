@@ -19,36 +19,6 @@ static uint8_t s_sync_buffer[64];
 
 
 
-/*
-static void sync_error_callback(DictionaryResult dict_error, AppMessageResult app_message_error, void *context) {
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "App Message Sync Error: %d", app_message_error);
-}
-
-static void sync_tuple_changed_callback(const uint32_t key, const Tuple* new_tuple, const Tuple* old_tuple, void* context) {
-  switch (key) {
-    case WEATHER_TEMPERATURE_KEY:
-      // App Sync keeps new_tuple in s_sync_buffer, so we may use it directly
-      set_colour(new_tuple->value->uint8);
-      break;
-  }
-}
-
-static void request_weather(void) {
-  DictionaryIterator *iter;
-  app_message_outbox_begin(&iter);
-
-  if (!iter) {
-    APP_LOG(APP_LOG_LEVEL_DEBUG,"Error creating outbound message");
-    return;
-  }
-
-  int value = 1;
-  dict_write_int(iter, 1, &value, sizeof(int), true);
-  dict_write_end(iter);
-
-  app_message_outbox_send();
-}
-*/
 
 static void update_graphics(Layer *lyr, GContext *ctx) {
   GRect bounds = layer_get_bounds(s_canvas_layer);
@@ -107,9 +77,9 @@ static void update_time() {
   if(minutes <= 3 || minutes > 57){
     // ish
     if(minutes > 10){
-      snprintf(buffer, sizeof("öppe Zwölfi"), "öppe %s", next_hour);
+      snprintf(buffer, sizeof("Zwölfi"), "%s", next_hour);
     }else{
-      snprintf(buffer, sizeof("öppe Zwölfi"), "öppe %s", hour);
+      snprintf(buffer, sizeof("Zwölfi"), "%s", hour);
     }
   }else if(minutes > 3 && minutes <= 7){
     snprintf(buffer, sizeof("Foif ab Zwölfi"), "Foif ab %s", hour);
@@ -124,7 +94,7 @@ static void update_time() {
   }else if(minutes > 27 && minutes <= 32){
     snprintf(buffer, sizeof("Halbi zwölfi"), "Halbi %s", hour);
   }else if(minutes > 32 && minutes <= 37){
-    snprintf(buffer, sizeof("Foif ab halbi zwölfi"), "Foif ab halbi %s", next_hour);
+    snprintf(buffer, sizeof("Foif ab halbi zwölfi"), "Foif ab Halbi %s", next_hour);
   }else if(minutes > 37 && minutes <= 42){
     snprintf(buffer, sizeof("Zwänzg vor zwölfi"), "Zwänzg vor %s", next_hour);
   }else if(minutes > 42 && minutes <= 47){
